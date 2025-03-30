@@ -1,146 +1,142 @@
-# Decentralized Voting App
+# DAO Voting App - v1.0.0
 
-A Web3 decentralized voting application built with Solidity, Next.js, Ethers.js, and Firebase.
+A decentralized governance application that allows creating proposals, on-chain voting, and delegation - built with Solidity, Next.js, and Firebase.
 
 ## Features
 
-- Connect to Ethereum wallet (MetaMask)
-- Create voting proposals on the blockchain
-- Vote on proposals
-- View proposal details and results
-- Secure on-chain voting with one vote per address
-- Store additional metadata in Firebase
+- 🔒 **Secure Authentication**: Email/password login and wallet connection
+- 📜 **On-Chain Proposals**: Create and manage proposals stored on Sepolia testnet
+- 🗳️ **Blockchain Voting**: Vote directly on-chain with your governance tokens
+- 👥 **Delegation System**: Delegate your voting power to trusted community members
+- 📊 **Governance Dashboard**: Monitor voting activity and proposal statuses
+- 👨‍💼 **Admin Panel**: Mint tokens and manage governance parameters
 
-## Tech Stack
+## Quick Start
 
-- **Smart Contract**: Solidity
-- **Frontend**: Next.js, Tailwind CSS
-- **Blockchain Interaction**: Ethers.js
-- **Development Environment**: Hardhat
-- **Authentication & Database**: Firebase
-- **Testing**: Hardhat testing framework
+### Prerequisites
 
-## Prerequisites
-
-- Node.js (v16+)
-- npm or yarn
+- Node.js v16+
 - MetaMask browser extension
+- Sepolia testnet ETH for gas fees
 - Firebase account
-- Infura account (for deployment to testnets/mainnet)
 
-## Getting Started
+### Installation
 
-### 1. Clone the repository
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/dao-voting-app.git
+   cd dao-voting-app
+   ```
 
-```bash
-git clone <repository-url>
-cd eth-voting-app
-```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-### 2. Install dependencies
+3. Create environment configuration:
+   ```bash
+   cp .env.local.example .env.local
+   ```
 
-```bash
-npm install
-```
+4. Update your `.env.local` with the following values:
+   ```
+   # Blockchain config
+   SEPOLIA_URL=https://eth-sepolia.g.alchemy.com/v2/YOUR_ALCHEMY_KEY
+   PRIVATE_KEY=YOUR_WALLET_PRIVATE_KEY
+   ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY
+   
+   # Contract addresses (from deployment)
+   NEXT_PUBLIC_VOTING_CONTRACT_ADDRESS=YOUR_VOTING_CONTRACT_ADDRESS
+   NEXT_PUBLIC_GOVERNANCE_TOKEN_ADDRESS=YOUR_GOVERNANCE_TOKEN_ADDRESS
+   
+   # Firebase config
+   NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_PROJECT_ID.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_PROJECT_ID.appspot.com
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_MESSAGING_SENDER_ID
+   NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_FIREBASE_APP_ID
+   ```
 
-### 3. Set up environment variables
+### Deploy Contracts
 
-Create or modify `.env.local` file in the root directory with the following variables:
+1. Deploy contracts to Sepolia testnet:
+   ```bash
+   npx hardhat run scripts/deploy.js --network sepolia
+   ```
 
-```
-# Smart Contract
-NEXT_PUBLIC_CONTRACT_ADDRESS=<deployed-contract-address>
+2. Verify contracts on Etherscan:
+   ```bash
+   npx hardhat verify --network sepolia YOUR_VOTING_CONTRACT_ADDRESS
+   npx hardhat verify --network sepolia YOUR_GOVERNANCE_TOKEN_ADDRESS
+   ```
 
-# Firebase Configuration
-NEXT_PUBLIC_FIREBASE_API_KEY=<your-firebase-api-key>
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=<your-firebase-auth-domain>
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=<your-firebase-project-id>
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=<your-firebase-storage-bucket>
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=<your-firebase-messaging-sender-id>
-NEXT_PUBLIC_FIREBASE_APP_ID=<your-firebase-app-id>
+3. Update your `.env.local` with the deployed contract addresses.
 
-# Infura Configuration
-NEXT_PUBLIC_INFURA_API_KEY=<your-infura-api-key>
-```
+### Run the Application
 
-For contract deployment to testnets or mainnet, create or modify `.env` file:
-
-```
-PRIVATE_KEY=<your-wallet-private-key>
-INFURA_API_KEY=<your-infura-api-key>
-```
-
-### 4. Compile and deploy smart contract
-
-```bash
-# Compile the contract
-npx hardhat compile
-
-# Deploy to local hardhat network
-npx hardhat run scripts/deploy.ts --network localhost
-
-# Or deploy to a testnet (e.g., Sepolia)
-npx hardhat run scripts/deploy.ts --network sepolia
-```
-
-Update the `NEXT_PUBLIC_CONTRACT_ADDRESS` in your `.env.local` file with the deployed contract address.
-
-### 5. Start the development server
-
+For development:
 ```bash
 npm run dev
 ```
 
-Visit http://localhost:3000 to see the application.
+For production:
+```bash
+npm run build
+npm start
+```
 
-## Testing
+## Production Deployment
+
+Use the included deployment script to prepare for production:
 
 ```bash
-# Run smart contract tests
-npx hardhat test
+chmod +x production-deployment.sh
+./production-deployment.sh
 ```
 
-## Deployment
+The script will:
+1. Check dependencies and environment variables
+2. Run tests and build the application
+3. Guide you through contract deployment if needed
+4. Provide instructions for hosting on Vercel or Netlify
 
-### Smart Contract
+## Firebase Setup
 
-```bash
-# Deploy to the Ethereum mainnet
-npx hardhat run scripts/deploy.ts --network mainnet
-```
+1. Create a new Firebase project at https://console.firebase.google.com/
+2. Enable Email/Password authentication
+3. Create a Firestore database with the following collections:
+   - `users`
+   - `proposals`
+   - `comments`
+   - `delegations`
+4. Set up Firestore rules:
+   ```
+   chmod +x deploy-firebase-rules.js
+   node deploy-firebase-rules.js
+   ```
 
-### Frontend
+## Getting Sepolia ETH
 
-Deploy to Vercel:
+You'll need Sepolia ETH to interact with the blockchain. Get some from:
+- [Sepolia Faucet](https://sepoliafaucet.com/)
+- [Alchemy Faucet](https://sepoliafaucet.com/)
 
-```bash
-vercel
-```
+## Documentation
 
-## Project Structure
+For detailed documentation, see [the full app documentation](docs/APP_DOCUMENTATION.md).
 
-```
-eth-voting-app/
-├── contracts/              # Solidity smart contracts
-├── scripts/                # Deployment scripts
-├── test/                   # Smart contract tests
-├── src/
-│   ├── app/                # Next.js pages
-│   ├── components/         # React components
-│   ├── hooks/              # Custom React hooks
-│   ├── lib/                # Library files and configurations
-│   └── services/           # Service functions (API calls, etc.)
-├── .env                    # Environment variables (for contract deployment)
-├── .env.local              # Local environment variables (for frontend)
-├── hardhat.config.ts       # Hardhat configuration
-└── package.json            # Project dependencies
-```
+## Known Issues in v1.0.0
 
-## Future Enhancements
+- Delegation UI may not show all delegates without manual refresh
+- Admin page requires whitelisted wallets (See AuthContext.tsx)
+- Some fallback to mock data when blockchain connection fails
+- Fixed wallet addresses in admin whitelist
 
-- Add token-weighted voting
-- Implement delegation of votes
-- Add proposal categories and filtering
-- Create a governance token
-- Implement quadratic voting
-- Add off-chain signature verification
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for details.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
